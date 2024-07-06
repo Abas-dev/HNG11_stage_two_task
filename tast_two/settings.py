@@ -1,4 +1,7 @@
 from pathlib import Path
+from datetime import timedelta
+import os 
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -8,12 +11,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-yvemhv_8-#lf1a-h7+=w^0+vu$jk_(q+_@6eu3509we-r!8%t('
+SECRET_KEY = 'a_secret_key_for_Hng_stage_two_task'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,6 +43,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'tast_two.urls'
+
+AUTH_USER_MODEL = "account.User"
 
 TEMPLATES = [
     {
@@ -70,6 +75,20 @@ DATABASES = {
     }
 }
 
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.getenv('DB_URL'), # add your own db url here 
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
+}
+
+
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -93,7 +112,11 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    
+    'DEFAULT_PERMISSION_CLASSES': [ 
+        'rest_framework.permissions.IsAuthenticated'
+    ]
 }
 
 # Internationalization
