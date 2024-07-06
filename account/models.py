@@ -28,7 +28,7 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 class User(AbstractUser):
-    userId = models.CharField(max_length= 100,blank= False,null= False)
+    userId = models.CharField(max_length= 100,blank= False,null= False) #need to work on this 
     email = models.EmailField(max_length= 80, unique= True)
     firstName = models.CharField(max_length= 150, blank= False,null=False)
     lastName = models.CharField(max_length= 150, blank= False,null=False) 
@@ -44,7 +44,7 @@ class User(AbstractUser):
 
 
 class Organisation(models.Model):
-    orgId = models.CharField(max_length= 100,blank= False,null= False)
+    orgId = models.CharField(max_length= 100,blank= False,null= False) # need to work on this 
     name = models.CharField(max_length= 150, blank= False,null=False)
     description = models.CharField(max_length= 150, blank= False,null=False)
     userId = models.ManyToManyField(User,related_name="organisations", null=False,blank=False)
