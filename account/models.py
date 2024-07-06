@@ -41,3 +41,15 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.first_name+" "+ self.last_name
+
+
+class Organisation(models.Model):
+    orgId = models.CharField(max_length= 100,blank= False,null= False)
+    name = models.CharField(max_length= 150, blank= False,null=False)
+    description = models.CharField(max_length= 150, blank= False,null=False)
+    userId = models.ManyToManyField(User,related_name="organisations", null=False,blank=False)
+
+
+class OrganisationMembers(models.Model):
+    userId = userId = models.ForeignKey(User,models.CASCADE, null=False,blank=False)
+    orgId = models.ForeignKey(Organisation,models.CASCADE, null=False,blank=False)
