@@ -1,6 +1,6 @@
 #!/bin/bash 
 
 pip3 install -r requirements.txt
-python manage.py makemigrations
-python manage.py migrate
-python manage.py collectstatic --noinput 
+python3.12 manage.py makemigrations
+python3.12 manage.py migrate
+python3.12 manage.py collectstatic --noinput 
