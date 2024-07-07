@@ -1,4 +1,4 @@
-#!/bin/python3.12
+#!/bin/bash 
 
 echo "  BUILD START"
 
