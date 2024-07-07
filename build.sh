@@ -1,4 +1,11 @@
+#!/bin/python3.12
+
 echo "  BUILD START"
-pip install -r requirements.txt
-python3.12 manage.py collectstatic --noinput --clear
+
+source venv/bin/activate
+
+pip3 install -r requirements.txt
+
+python3.12 manage.py collectstatic --noinput 
+
 echo "  BUILD END"
