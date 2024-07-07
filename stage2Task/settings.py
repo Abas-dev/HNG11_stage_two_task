@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 from datetime import timedelta
 from pathlib import Path
+import os 
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -103,11 +105,15 @@ WSGI_APPLICATION = 'stage2Task.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default= "postgresql://stagetwotask_5fdv_user:7kh0dRasyr90E0lDZWcU0dPHnuBzEkQF@dpg-cq5h0jo8fa8c7387borg-a.oregon-postgres.render.com/stagetwotask_5fdv", # add your own db url here. nah rush de do me ooo 
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
+
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 # Password validation

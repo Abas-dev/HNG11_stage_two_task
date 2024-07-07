@@ -11,4 +11,4 @@ PyJWT==2.8.0
 pytest==8.2.2
 sqlparse==0.5.0
 whitenoise
-
+dj-database-url
