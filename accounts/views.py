@@ -19,7 +19,7 @@ class UserRegistrationView(APIView):
             user = serializer.save()
             token = RefreshToken.for_user(user)
             return Response({'status': 'success',
-                             'message': 'User successfully registered',
+                             'message': 'Registration successful',
                              'data': {'accessToken': str(token.access_token),
                                       'user': UserSerializer(user).data}},
                             status=status.HTTP_201_CREATED)
@@ -165,10 +165,17 @@ class OrganizationCreateView(APIView):
         if serializer.is_valid():
             org = serializer.save()
             Membership.objects.create(user=request.user, organization=org)
+            
+            ser = self.serializer_class(org).data
+
             return Response({
                 'status': 'success',
                 'message': 'Organisation created successfully',
-                'data': self.serializer_class(org).data
+                'data': {
+                    "orgId": ser["orgId"], 
+                    "name": ser["name"], 
+                    "description": ser["description"]
+                }
             }, status=status.HTTP_201_CREATED)
         return Response({
                 'status': 'Bad request',

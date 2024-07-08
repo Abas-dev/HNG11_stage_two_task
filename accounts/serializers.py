@@ -55,7 +55,7 @@ class OrganisationSerializer(serializers.ModelSerializer):
 class OrganisationCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organization
-        fields = ['name', 'description']
+        fields = ["orgId",'name', 'description']
 
 
 class MembershipSerializer(serializers.ModelSerializer):
