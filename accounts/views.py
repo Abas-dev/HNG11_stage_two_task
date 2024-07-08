@@ -179,7 +179,7 @@ class OrganizationCreateView(APIView):
             }, status=status.HTTP_201_CREATED)
         return Response({
                 'status': 'Bad request',
-                'message': 'Invalid data',
+                'message': 'Client error',
                 'statusCode': 400,
                 'errors': [
                 {
@@ -187,7 +187,7 @@ class OrganizationCreateView(APIView):
                     'message': serializer.errors[list(serializer.errors.keys())[0]][0]
                 }
             ]
-        }, status=422)
+        }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AddUserToOrganizationView(APIView):
