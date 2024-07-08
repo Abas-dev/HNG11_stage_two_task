@@ -8,7 +8,7 @@ from .models import User, Organization, Membership
 
 class TokenGenerationTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(email='test@example.com', first_name='John', last_name='Doe', password='password123')
+        self.user = User.objects.create_user(email='test@example.com', firstName='John', lastName='Doe', password='password123')
 
     def test_token_expiry(self):
         token = RefreshToken.for_user(self.user)
@@ -19,8 +19,8 @@ class TokenGenerationTestCase(TestCase):
 
 class OrganizationPermissionTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(email='test@example.com', first_name='John', last_name='Doe', password='password123')
-        self.other_user = User.objects.create_user(email='other@example.com', first_name='Jane', last_name='Smith', password='password456')
+        self.user = User.objects.create_user(email='test@example.com', firstName='John', lastName='Doe', password='password123')
+        self.other_user = User.objects.create_user(email='other@example.com', firstName='Jane', lastName='Smith', password='password456')
         self.organization = Organization.objects.create(name="John's Organization")
 
     def test_user_cannot_access_unrelated_organization(self):
