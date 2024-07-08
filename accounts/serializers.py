@@ -8,7 +8,7 @@ from .models import *
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['user_id', 'first_name', 'last_name', 'email', 'phone']
+        fields = ['userId', 'firstName', 'lastName', 'email', 'phone']
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -16,18 +16,18 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'password', 'phone']
+        fields = ['firstName', 'lastName', 'email', 'password', 'phone']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = User.objects.create_user(
             email=validated_data['email'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name'],
+            firstName=validated_data['firstName'],
+            lastName=validated_data['lastName'],
             phone = validated_data['phone'],
             password=validated_data['password']
         )
-        org_name = f"{validated_data['first_name']}'s Organization"
+        org_name = f"{validated_data['firstName']}'s Organization"
         organization = Organization.objects.create(name=org_name)
         Membership.objects.create(user=user, organization=organization)
         return user
@@ -38,9 +38,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return {
-            "userId": str(instance.user_id),
-            "firstName": instance.first_name,
-            "lastName": instance.last_name,
+            "userId": str(instance.userId),
+            "firstName": instance.firstName,
+            "lastName": instance.lastName,
             "email": instance.email,
             "phone": instance.phone
         }
@@ -49,7 +49,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class OrganisationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organization
-        fields = ['org_id', 'name', 'description']
+        fields = ['orgId', 'name', 'description']
 
 
 class OrganisationCreateSerializer(serializers.ModelSerializer):
