@@ -90,7 +90,7 @@ class UserLoginView(APIView):
             }, status=status.HTTP_401_UNAUTHORIZED)
 
 
-class UserDetailView(APIView):
+class UserDetailView(APIView):  #this isnt working sha 
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
 
