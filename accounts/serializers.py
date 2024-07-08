@@ -4,25 +4,6 @@ from rest_framework.response import Response
 
 from .models import *
 
-from rest_framework.views import exception_handler
-
-
-def custom_exception_handler(exc, context):
-    response = exception_handler(exc, context)
-
-    if isinstance(exc, ValidationError):
-        custom_response = {
-            "errors": [
-                {
-                    "field": list(exc.detail.keys())[0],
-                    "message": exc.detail[list(exc.detail.keys())[0]][0]
-                }
-            ]
-        }
-        return Response(custom_response, status=422)
-
-    return response
-
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,6 +17,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'password', 'phone']
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = User.objects.create_user(
@@ -96,4 +78,3 @@ class LoginSerializer(serializers.Serializer):
         email = attrs.get('email')
         validate_email_format(email)
         return attrs
-

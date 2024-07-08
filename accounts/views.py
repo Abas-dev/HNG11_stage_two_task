@@ -1,6 +1,4 @@
 from django.shortcuts import get_object_or_404
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-
 from .serializers import *
 from .models import *
 from rest_framework import status
@@ -26,6 +24,9 @@ class UserRegistrationView(APIView):
                                       'user': UserSerializer(user).data}},
                             status=status.HTTP_201_CREATED)
         return Response({
+            'status': 'Bad request',
+            'message': 'Registration unsuccessful',
+            'statusCode': 400,
             'errors': [
                 {
                     'field': list(serializer.errors.keys())[0],
@@ -42,6 +43,9 @@ class UserLoginView(APIView):
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response({
+                'status': 'Bad request',
+                'message': 'Authentication failed',
+                'statusCode': 401,
                 'errors': [
                     {
                         'field': list(serializer.errors.keys())[0],
@@ -159,16 +163,24 @@ class OrganizationCreateView(APIView):
                 'status': 'Bad request',
                 'message': 'Invalid data',
                 'statusCode': 400,
-                'errors': serializer.errors
-            }, status=status.HTTP_400_BAD_REQUEST)
+                'errors': [
+                {
+                    'field': list(serializer.errors.keys())[0],
+                    'message': serializer.errors[list(serializer.errors.keys())[0]][0]
+                }
+            ]
+        }, status=422)
 
 
 class AddUserToOrganizationView(APIView):
     def post(self, request, org_id):
         user_id = request.data.get('userId')
         if not user_id:
-            return Response({"status": "error", "message": "userId is required"}, status=status.HTTP_400_BAD_REQUEST)
-
+            return Response({
+                'status': 'Bad Request',
+                'message': 'userId is required',
+                'statusCode': 400
+            }, status=status.HTTP_400_BAD_REQUEST)
         organization = get_object_or_404(Organization, org_id=org_id)
         user = get_object_or_404(User, user_id=user_id)
 
