@@ -134,9 +134,20 @@ class OrganizationDetailsView(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            organization = Organization.objects.get(org_id=org_uuid, users=request.user)
+            organization = Organization.objects.get(orgId=org_uuid, users=request.user)
             serializer = self.serializer_class(organization)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+
+            response = {
+                "status": "success",
+		        "message": "Getting organistation by id",
+                "data": {
+                        "orgId": serializer.data["orgId"], 
+                        "name": serializer.data["name"], 
+                        "description": serializer.data["description"],
+                }
+            }
+
+            return Response(data= response, status=status.HTTP_200_OK)
         except Organization.DoesNotExist:
             return Response({
                 'status': 'Not Found',
