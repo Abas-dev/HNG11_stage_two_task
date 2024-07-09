@@ -90,22 +90,54 @@ class UserLoginView(APIView):
             }, status=status.HTTP_401_UNAUTHORIZED)
 
 
-class UserDetailView(APIView):  #this isnt working sha 
+# class UserDetailView(APIView):  #this isnt working sha 
+#     permission_classes = [IsAuthenticated]
+#     serializer_class = UserSerializer
+
+#     def get(self, request, pk):
+#         user = User.objects.filter(pk=pk, userId=request.user.userId).first()
+
+#         if user and user.userId == request.user.firstName:
+#             serializer = self.serializer_class(user)
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+#         return Response({
+#             'status': 'Not found',
+#             'message': 'User not found',
+#             'statusCode': 404
+#         }, status=status.HTTP_404_NOT_FOUND)        
+
+
+class UserDetailView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
 
     def get(self, request, pk):
-        user = User.objects.filter(pk=pk, userId=request.user.userId).first()
+        try:
+            user = User.objects.get(userId=pk)
+        except User.DoesNotExist:
+            return Response({
+                'status': 'Not found',
+                'message': 'User not found',
+                'statusCode': 404
+            }, status=status.HTTP_404_NOT_FOUND)
 
-        if user and user.userId == request.user.firstName:
+        # Check if the authenticated user is the same as the requested user
+        if user == request.user:
             serializer = self.serializer_class(user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response({
-            'status': 'Not found',
-            'message': 'User not found',
-            'statusCode': 404
-        }, status=status.HTTP_404_NOT_FOUND)
 
+            response = {
+                "status": "success",
+		        "message": "Getting user by id",
+                "data": serializer.data
+            }
+
+            return Response(data= response, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'status': 'Forbidden',
+                'message': 'You do not have permission to access this user record',
+                'statusCode': 403
+            }, status=status.HTTP_403_FORBIDDEN)
 
 class OrganizationListView(APIView):
     permission_classes = [IsAuthenticated]
